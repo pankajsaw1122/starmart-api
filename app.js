@@ -1,41 +1,51 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express');
+var exphbs = require('express-handlebars');
+const bodyParser = require('body-parser');
+const mysql = require('mysql');
+var cors = require('cors')
+const app = express();
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+app.use(cors());
+//Load routes
+// const imageUpload = require('./routes/api/uploads/imageUpload');
+// const admin = require('./routes/api/admin/admin');
+// const student = require('./routes/api/student/student');
+// const fees = require('./routes/api/fees/fees');
+// const studentList = require('./routes/api/student/studentList');
 
-var app = express();
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
+app.use(express.static('./public'));
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+//handlebars middleware
+app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+app.set('view engine', 'handlebars');
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+// Index route
+app.get('/', (req, res) => {
+    const title = 'Welcome';
+    res.render('index', {
+        title: title
+    });
+});
+// test
+app.get('/test', (req, res) => {
+    res.render('test');
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+// use routes
+// app.use('/update', update);
+// app.post('/imageUpload', imageUpload);
+// app.post('/registerAdmin', admin);
+// app.post('/adminLogin', admin);
+// app.post('/studentAdmission', student);
+// app.post('/updateStudentDetails', student);
+// app.post('/deleteStudent', student);
+// app.post('/searchStudent', student);
+// app.post('/insertFees', fees);
+// app.get('/studentList', studentList);
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+const port = 5000;
+app.listen(port, () => {
+    console.log('server started on port: ' + port);
 });
-
-module.exports = app;

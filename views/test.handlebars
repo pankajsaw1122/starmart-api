@@ -1,0 +1,359 @@
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1>Starmart API</h1>
+        <p>Api Doc of Starmart</p>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="container-fluid">
+            <h2>Admin</h2>
+            <div class="card">
+                <div class="card-header">
+                    <h6>Register Admin</h6>
+                </div>
+                <div class="card-body">
+                    <div class="content">
+                        <p>
+                            <span class="left-text"> URL: </span>
+                            <span class="right-text"> /adminRegister</span>
+                        </p>
+                        <p>
+                            <span class="left-text"> Method: </span>
+                            <span class="right-text"> POST</span>
+                        </p>
+                        <p>
+                            <span class="left-text"> Description: </span>
+                            <span class="right-text"> to register admin for admin panel</span>
+                        </p>
+                        <p>
+                            <span class="left-text"> Parameter: </span>
+                        </p>
+                        <div class="table-container">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Field</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>first_name</td>
+                                        <td>String</td>
+                                        <td>First name of admin</td>
+                                    </tr>
+                                    <tr>
+                                        <td>last_name</td>
+                                        <td>String</td>
+                                        <td>Last name of admin</td>
+                                    </tr>
+                                    <tr>
+                                        <td>contact_number</td>
+                                        <td>String</td>
+                                        <td>contact number of admin</td>
+                                    </tr>
+                                    <tr>
+                                        <td>email_id</td>
+                                        <td>String</td>
+                                        <td>Email id of admin</td>
+                                    </tr>
+                                    <tr>
+                                        <td>password</td>
+                                        <td>String</td>
+                                        <td>Password of admin</td>
+                                    </tr>
+                                    <tr>
+                                        <td>confirm_password</td>
+                                        <td>String</td>
+                                        <td>Password of admin</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p>
+                            <span class="left-text"> Test: </span>
+                        </p>
+                        <div class="form-container">
+                            <form class="form-inline" action="/adminLogin">
+                                <label class="pad12">first_name:</label>
+                                <input type="text" class="form-control" name="first_name">
+
+                                <label class="pad12">last_name:</label>
+                                <input type="text" class="form-control" name="last_name">
+
+                                <label class="pad12">contact_number:</label>
+                                <input type="number" class="form-control" name="contact_number">
+
+                                <label class="pad12" for="email">email_id:</label>
+                                <input type="email" class="form-control" name="email_id">
+
+                                <label class="pad12" for="pwd">password:</label>
+                                <input type="password" class="form-control" name="password">
+
+                                <label class="pad12" for="pwd">confirm_password:</label>
+                                <input type="password" class="form-control" name="confirm_password">
+
+                                <button type="submit" class="btn btn-primary left-marg">Submit</button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="card marg-top">
+                <div class="card-header">
+                    <h6>Admin Login</h6>
+                </div>
+                <div class="card-body">
+                    <div class="content">
+                        <p>
+                            <span class="left-text"> URL: </span>
+                            <span class="right-text"> /adminLogin</span>
+                        </p>
+                        <p>
+                            <span class="left-text"> Method: </span>
+                            <span class="right-text"> POST</span>
+                        </p>
+                        <p>
+                            <span class="left-text"> Description: </span>
+                            <span class="right-text"> to login admin into admin panel</span>
+                        </p>
+                        <div class="table-container">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Field</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>email_id</td>
+                                        <td>String</td>
+                                        <td>Email id of admin</td>
+                                    </tr>
+                                    <tr>
+                                        <td>password</td>
+                                        <td>String</td>
+                                        <td>Password of admin</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p>
+                            <span class="left-text"> Test: </span>
+                        </p>
+                        <div class="form-container">
+                            <form class="form-inline" action="/adminLogin">
+                                <label class="pad12">email_id:</label>
+                                <input type="email" class="form-control" name="email_id">
+                                <label class="pad12" for="pwd">password:</label>
+                                <input type="password" class="form-control" name="pwd">
+                                <button type="submit" class="btn btn-primary left-marg">Submit</button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="card marg-top">
+                <div class="card-header">
+                    <h6>Change Password</h6>
+                </div>
+                <div class="card-body">
+                    <div class="content">
+                        <p>
+                            <span class="left-text"> URL: </span>
+                            <span class="right-text"> /adminChangePassword</span>
+                        </p>
+                        <p>
+                            <span class="left-text"> Method: </span>
+                            <span class="right-text"> POST</span>
+                        </p>
+                        <p>
+                            <span class="left-text"> Description: </span>
+                            <span class="right-text"> to change password of admin</span>
+                        </p>
+                        <div class="table-container">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Field</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>email_id</td>
+                                        <td>String</td>
+                                        <td>Email id of admin</td>
+                                    </tr>
+                                    <tr>
+                                        <td>old_password</td>
+                                        <td>String</td>
+                                        <td>Password of admin</td>
+                                    </tr>
+                                    <tr>
+                                        <td>new_password</td>
+                                        <td>String</td>
+                                        <td>Password of admin</td>
+                                    </tr>
+                                    <tr>
+                                        <td>confirm_password</td>
+                                        <td>String</td>
+                                        <td>Password of admin</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p>
+                            <span class="left-text"> Test: </span>
+                        </p>
+                        <div class="form-container">
+                            <form class="form-inline" action="/adminLogin">
+                                <label class="pad12">email_id:</label>
+                                <input type="email" class="form-control" name="email_id">
+
+                                <label class="pad12" for="pwd">old_password:</label>
+                                <input type="password" class="form-control" name="old_password">
+
+                                <label class="pad12" for="pwd">new_password:</label>
+                                <input type="password" class="form-control" name="new_password">
+
+                                <label class="pad12" for="pwd">confirm_password:</label>
+                                <input type="password" class="form-control" name="confirm_password">
+
+                                <button type="submit" class="btn btn-primary left-marg">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card marg-top">
+                <div class="card-header">
+                    <h6>Forget Password</h6>
+                </div>
+                <div class="card-body">
+                    <div class="content">
+                        <p>
+                            <span class="left-text"> URL: </span>
+                            <span class="right-text"> /adminForgetPassword</span>
+                        </p>
+                        <p>
+                            <span class="left-text"> Method: </span>
+                            <span class="right-text"> POST</span>
+                        </p>
+                        <p>
+                            <span class="left-text"> Description: </span>
+                            <span class="right-text"> If admin forgets the password </span>
+                        </p>
+                        <div class="table-container">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Field</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>email_id</td>
+                                        <td>String</td>
+                                        <td>Email id of admin</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p>
+                            <span class="left-text"> Test: </span>
+                        </p>
+                        <div class="form-container">
+                            <form class="form-inline" action="/adminLogin">
+                                <label class="pad12">email_id:</label>
+                                <input type="email" class="form-control" name="email_id">
+
+                                <button type="submit" class="btn btn-primary left-marg">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card marg-top">
+                <div class="card-header">
+                    <h6>Reset Password</h6>
+                </div>
+                <div class="card-body">
+                    <div class="content">
+                        <p>
+                            <span class="left-text"> URL: </span>
+                            <span class="right-text"> /adminResetPassword</span>
+                        </p>
+                        <p>
+                            <span class="left-text"> Method: </span>
+                            <span class="right-text"> POST</span>
+                        </p>
+                        <p>
+                            <span class="left-text"> Description: </span>
+                            <span class="right-text"> If admin forgets the password then create new password </span>
+                        </p>
+                        <div class="table-container">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Field</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>email_id</td>
+                                        <td>String</td>
+                                        <td>Email id of admin</td>
+                                    </tr>
+                                    <tr>
+                                        <td>password</td>
+                                        <td>String</td>
+                                        <td>Password of admin</td>
+                                    </tr>
+                                    <tr>
+                                        <td>confirm_password</td>
+                                        <td>String</td>
+                                        <td>Password of admin</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p>
+                            <span class="left-text"> Test: </span>
+                        </p>
+                        <div class="form-container">
+                            <form class="form-inline" action="/adminLogin">
+                                <label class="pad12">email_id:</label>
+                                <input type="email" class="form-control" name="email_id">
+
+                                <label class="pad12" for="pwd">password:</label>
+                                <input type="password" class="form-control" name="password">
+
+                                <label class="pad12" for="pwd">confirm_password:</label>
+                                <input type="password" class="form-control" name="confirm_password">
+
+                                <button type="submit" class="btn btn-primary left-marg">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
