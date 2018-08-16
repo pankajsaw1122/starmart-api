@@ -1,7 +1,5 @@
-const mongoose = require('mongoose');
-var regex = require('regex-email');
 const async = require('async');
-const connection = require('../models/educraftersdb');
+// const connection = require('../models/educraftersdb');
 var sendResponse = require('./sendresponse');
 
 // check for blank values
@@ -38,7 +36,8 @@ function checkBlank(arr) {
 
 // check email is valid or not
 exports.checkEmailValidity = function (res, email, callback) {
-    if (regex.test(email) === false) {
+    var regx = new RegExp(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+    if (regx.test(email) === false) {
         sendResponse.sendErrorMessage('Invalid email id', res);
     } else {
         callback(null);

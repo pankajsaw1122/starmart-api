@@ -5,23 +5,25 @@ const bcrypt = require('bcrypt');
 var randomstring = require("randomstring");
 var nodemailer = require('nodemailer');
 const router = express.Router();
+var validate = require('../../validation')
 var func = require('./../../commonfunction'); // call common fuctions
 var sendResponse = require('./../../sendresponse'); // send response to user
 
-const connection = require('../../../models/educraftersdb');
+// const connection = require('../../../models/educraftersdb');
 
 // Api call
-router.post('/registerAdmin', (req, res) => {
-    var manValues = [req.body.name, req.body.email_id, req.body.password, req.body.mobile_number];
+router.post('/adminRegister', (req, res) => {
+    console.log('Inside admin file');
+    var manValues = [req.body.firstName, req.body.lastName, req.body.contactNumber, req.body.emailId, req.body.password];
 
     async.waterfall([
         function (callback) {
-            // check empty values
-            func.checkBlank(res, manValues, callback);
+            // check empty or invalid values
+            validate.validateAdminRegister(res, manValues, callback);
         },
         function (callback) {
             //  validate email
-            func.checkEmailValidity(res, req.body.userEmail, callback);
+            func.checkEmailValidity(res, req.body.emailId, callback);
         },
         function (callback) {
             // check if user allready registered
@@ -30,8 +32,8 @@ router.post('/registerAdmin', (req, res) => {
     ],
         function () {
             let hash = bcrypt.hashSync(req.body.password, 10);
-            var post = { accessToken: randomstring.generate(12), name: req.body.name, email_id: req.body.email_id, password: hash, mobile_number: req.body.mobile_number };
-            var query = connection.query('INSERT INTO adminDetails SET ?', post, function (error, results, fields) {
+            var post = { access_token: randomstring.generate(12), first_name: req.body.firstName, last_name: req.body.lastName, email_id: req.body.emaiId, password: hash, contact_number: req.body.contactNumber };
+            connection.query('INSERT INTO admin SET ?', post, function (error, results, fields) {
                 if (error) {
                     sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err message if unable to save data 
                 } else {
@@ -68,20 +70,20 @@ router.post('/registerAdmin', (req, res) => {
 
 // Api call
 router.post('/adminLogin', (req, res) => {
-    var manValues = [req.body.email_id, req.body.password];
+    var manValues = [req.body.emailOrMobile, req.body.password];
 
     async.waterfall([
         function (callback) {
             // check empty values
-            func.checkBlank(res, manValues, callback);
+            validate.validateLoginParameter(res, manValues, callback);
         },
         function (callback) {
             // check if user registered or not
-            func.checkEmailAvailibility(res, req.body.email_id, callback);
+            func.checkEmailAvailibility(res, req.body.emailOrMobile, callback);
         }
     ],
         function () {
-            var query = connection.query('SELECT * FROM adminDetails WHERE email_id = ?', [req.body.email_id], function (error, results, fields) {
+            connection.query('SELECT * FROM adminDetails WHERE email_id OR contact_number = ?', [req.body.emailOrMobile], function (error, results, fields) {
                 if (error) {
                     sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err msg if err in finding user                  
                 } else {
@@ -91,8 +93,8 @@ router.post('/adminLogin', (req, res) => {
                         const checkPassword = bcrypt.compareSync(req.body.password, results[0].password);
                         if (checkPassword) {
                             let data = {
-                                accessToken: results[0].accessToken,
-                                adminName: results[0].name,
+                                accessToken: results[0].access_token,
+                                adminName: results[0].first_name,
                                 adminEmail: results[0].email_id
                             };
                             sendResponse.sendSuccessData(data, res); // send user data to client
@@ -105,5 +107,78 @@ router.post('/adminLogin', (req, res) => {
         }
     )
 });
+
+router.post('/adminChangePassword', (req, res) => {
+    var manValues = [req.body.adminId, req.body.currentPassword, req.body.newPassword];
+    async.waterfall([
+        function (callback) {
+            // check empty values
+            validate.validateChangePassword(res, manValues, callback);
+        },
+    ],
+        function () {
+            connection.query('select password from admin where id = ?', [req.body.adminId], function (error, results, fields) {
+                if (error) {
+                    sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err msg if err in finding user                  
+                } else {
+                    if (results.length == 0) {
+                        sendResponse.sendErrorMessage('incorrect id', res);
+                    } else {
+                        const checkPassword = bcrypt.compareSync(req.body.currentPassword, results[0].password);
+                        if (checkPassword) {
+                            connection.query('update admin set password = ? WHERE password = ? AND id = ?', [req.body.newPassword, req.body.currentPassword, req.body.adminId], function (error, results, fields) {
+                                if (error) {
+                                    sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err msg if err in finding user                  
+                                } else {
+                                    sendResponse.sendSuccessData('Password Successfully changed', res);
+                                }
+                            });
+                        } else {
+                            sendResponse.sendErrorMessage('Current password is incorrect', res); // send err msg if err in finding user                  
+                        }
+                    }
+                }
+            })
+        }
+    )
+});
+
+
+router.post('/adminForgetPassword', (req, res) => {
+    var manValues = req.body.emailOrMobile;
+    async.waterfall([
+        function (callback) {
+            // check empty values
+            validate.validateForgetPassword(res, manValues, callback);
+        },
+    ],
+        function () {
+            console.log('In forget password');
+            // connection.query('select email_id, contact_number from admin where email_id = ? OR contact_number = ?', [req.body.emailOrMobile], function (error, results, fields) {
+            //     if (error) {
+            //         sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err msg if err in finding user                  
+            //     } else {
+            //         if (results.length == 0) {
+            //             sendResponse.sendErrorMessage('incorrect id', res);
+            //         } else {
+            //             const checkPassword = bcrypt.compareSync(req.body.currentPassword, results[0].password);
+            //             if (checkPassword) {
+            //                 connection.query('update admin set password = ? WHERE password = ? AND id = ?', [req.body.newPassword, req.body.currentPassword, req.body.adminId], function (error, results, fields) {
+            //                     if (error) {
+            //                         sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err msg if err in finding user                  
+            //                     } else {
+            //                         sendResponse.sendSuccessData('Password Successfully changed', res);
+            //                     }
+            //                 });
+            //             } else {
+            //                 sendResponse.sendErrorMessage('Current password is incorrect', res); // send err msg if err in finding user                  
+            //             }
+            //         }
+            //     }
+            // })
+        }
+    )
+});
+
 module.exports = router;
 
