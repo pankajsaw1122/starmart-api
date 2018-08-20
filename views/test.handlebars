@@ -50,9 +50,9 @@
                                         <td>Last name of admin</td>
                                     </tr>
                                     <tr>
-                                        <td>contactNumber</td>
+                                        <td>mobileNumber</td>
                                         <td>String</td>
-                                        <td>contact number of admin</td>
+                                        <td>mobile number of admin</td>
                                     </tr>
                                     <tr>
                                         <td>emailId</td>
@@ -83,8 +83,8 @@
                                 <label class="pad12">lastName:</label>
                                 <input type="text" class="form-control" name="lastName">
 
-                                <label class="pad12">contactNumber:</label>
-                                <input type="number" class="form-control" name="contactNumber">
+                                <label class="pad12">mobileNumber:</label>
+                                <input type="number" class="form-control" name="mobileNumber">
 
                                 <label class="pad12" for="email">emailId:</label>
                                 <input type="email" class="form-control" name="emailId">
@@ -149,7 +149,7 @@
                                 <label class="pad12">emailOrMobile:</label>
                                 <input type="text" class="form-control" name="emailOrMobile">
                                 <label class="pad12" for="pwd">password:</label>
-                                <input type="password" class="form-control" name="pwd">
+                                <input type="password" class="form-control" name="password">
                                 <button type="submit" class="btn btn-primary left-marg">Submit</button>
                             </form>
                         </div>
@@ -188,7 +188,7 @@
                                 <tbody>
                                     <tr>
                                         <td>adminId</td>
-                                        <td>String</td>
+                                        <td>int</td>
                                         <td>id of admin</td>
                                     </tr>
                                     <tr>
@@ -215,7 +215,7 @@
                         <div class="form-container">
                             <form class="form-inline" action="/adminChangePassword" method="POST">
                                 <label class="pad12">adminId:</label>
-                                <input type="email" class="form-control" name="adminId">
+                                <input type="text" class="form-control" name="adminId">
 
                                 <label class="pad12" for="pwd">currentPassword:</label>
                                 <input type="password" class="form-control" name="currentPassword">
@@ -347,6 +347,110 @@
                     </div>
                 </div>
             </div>
+
+
+            <div class="card marg-top">
+                <div class="card-header">
+                    <h6>Forget Password</h6>
+                </div>
+                <div class="card-body">
+                    <div class="content">
+                        <p>
+                            <span class="left-text"> URL: </span>
+                            <span class="right-text"> /adminForgetPassword</span>
+                        </p>
+                        <p>
+                            <span class="left-text"> Method: </span>
+                            <span class="right-text"> POST</span>
+                        </p>
+                        <p>
+                            <span class="left-text"> Description: </span>
+                            <span class="right-text"> If admin forgets the password </span>
+                        </p>
+                        <div class="table-container">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Field</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>emailOrMobile</td>
+                                        <td>String</td>
+                                        <td>Email id or Mobile number of admin</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p>
+                            <span class="left-text"> Test: </span>
+                        </p>
+                        <div class="form-container">
+                            <form class="form-inline" action="/adminForgetPassword" method="POST">
+                                <label class="pad12">emailOrMobile:</label>
+                                <input type="text" class="form-control" name="emailOrMobile">
+
+                                <button type="submit" class="btn btn-primary left-marg">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card marg-top">
+                <div class="card-header">
+                    <h6>verify otp</h6>
+                </div>
+                <div class="card-body">
+                    <div class="content">
+                        <p>
+                            <span class="left-text"> URL: </span>
+                            <span class="right-text"> /verifyOtp</span>
+                        </p>
+                        <p>
+                            <span class="left-text"> Method: </span>
+                            <span class="right-text"> POST</span>
+                        </p>
+                        <p>
+                            <span class="left-text"> Description: </span>
+                            <span class="right-text"> verify otp </span>
+                        </p>
+                        <div class="table-container">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Field</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>otp</td>
+                                        <td>Int</td>
+                                        <td>otp sent to registered email or mobile number</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p>
+                            <span class="left-text"> Test: </span>
+                        </p>
+                        <div class="form-container">
+                            <form class="form-inline" action="/verifyOtp" method="POST">
+                                <label class="pad12">otp:</label>
+                                <input type="text" class="form-control" name="otp">
+
+                                <button type="submit" class="btn btn-primary left-marg">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

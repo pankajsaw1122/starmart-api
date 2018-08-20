@@ -1,73 +1,32 @@
 const async = require('async');
-// const connection = require('../models/educraftersdb');
+const connection = require('../config/database.config');
 var sendResponse = require('./sendresponse');
 
-// check for blank values
-exports.checkBlank = function (res, manValues, callback) {
-    var checkBlankData = checkBlank(manValues);
-    if (checkBlankData) {
-        sendResponse.sendErrorMessage('Some Parameter Missing', res);
-    }
-    else {
-        callback(null);
-    }
-}
-
-function checkBlank(arr) {
-
-    var arrlength = arr.length;
-
-    for (var i = 0; i < arrlength; i++) {
-        if (arr[i] == '') {
-            return 1;
-            break;
-        }
-        else if (arr[i] == undefined) {
-            return 1;
-            break;
-        }
-        else if (arr[i] == '(null)') {
-            return 1;
-            break;
-        }
-    }
-    return 0;
-}
-
 // check email is valid or not
-exports.checkEmailValidity = function (res, email, callback) {
-    var regx = new RegExp(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-    if (regx.test(email) === false) {
-        sendResponse.sendErrorMessage('Invalid email id', res);
-    } else {
-        callback(null);
-    }
-}
-
-// check if email is registered or not
-exports.checkEmailExistence = function (res, email, callback) {
-    var query = connection.query('SELECT * FROM adminDetails WHERE email_id = ?', [email], function (error, results, fields) {
+exports.checkAlreadyRegistered = function (res, mobile, email, callback) {
+    connection.query('SELECT id FROM admin WHERE mobile_number = ? OR email_id = ?' , [mobile, email], function (error, results, fields) {
         if (error) {
             sendResponse.sendErrorMessage('Something went wrong please try again later', res);
         } else {
             if (results.length === 0) {
                 callback(null);
             } else {
-                sendResponse.sendErrorMessage('Email-id is already registered', res);
+                sendResponse.sendErrorMessage('User is already registered', res);
             }
         }
     });
 }
-// check email is registered or not
-exports.checkEmailAvailibility = function (res, email, callback) {
-    var query = connection.query('SELECT * FROM adminDetails WHERE email_id = ?', [email], function (error, results, fields) {
+
+// check if email is registered or not
+exports.checUserExistence = function (res, emailOrPhone, callback) {
+     connection.query('SELECT id FROM admin WHERE email_id = ? OR mobile_number = ?', [emailOrPhone, emailOrPhone], function (error, results, fields) {
         if (error) {
             sendResponse.sendErrorMessage('Something went wrong please try again later', res);
         } else {
             if (results.length === 0) {
-                sendResponse.sendErrorMessage('Email-id is not registered', res);
+                sendResponse.sendErrorMessage('User is not registered', res);
             } else {
-                callback(null);
+                callback(null);                
             }
         }
     });
