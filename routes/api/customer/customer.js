@@ -11,7 +11,7 @@ var func = require('../../common/commonfunction'); // call common fuctions
 var sendResponse = require('../../common/sendresponse'); // send response to user
 
 // Api call
-router.post('/register', (req, res) => {
+router.post('/adminRegister', (req, res) => {
     console.log('Inside admin file');
     var manValues = [req.body.firstName, req.body.lastName, req.body.mobileNumber, req.body.emailId, req.body.password];
 
@@ -45,7 +45,7 @@ router.post('/register', (req, res) => {
 });
 
 // Api call
-router.post('/login', (req, res) => {
+router.post('/adminLogin', (req, res) => {
     var manValues = [req.body.emailOrMobile, req.body.password];
 
     async.waterfall([
@@ -88,7 +88,7 @@ router.post('/login', (req, res) => {
     )
 });
 
-router.post('/changePassword', (req, res) => {
+router.post('/adminChangePassword', (req, res) => {
     var manValues = [req.body.adminId, req.body.currentPassword, req.body.newPassword];
     async.waterfall([
         function (callback) {
@@ -124,7 +124,7 @@ router.post('/changePassword', (req, res) => {
 });
 
 
-router.post('/forgetPassword', (req, res) => {
+router.post('/adminForgetPassword', (req, res) => {
     let manValues = req.body.emailOrMobile;
     async.waterfall([
         function (callback) {
@@ -160,7 +160,6 @@ router.post('/forgetPassword', (req, res) => {
     )
 });
 
-
 router.post('/verifyOtp', (req, res) => {
     let manValues = [req.body.userId, req.body.otp];
     async.waterfall([
@@ -186,7 +185,6 @@ router.post('/verifyOtp', (req, res) => {
         }
     )
 });
-
 
 module.exports = router;
 

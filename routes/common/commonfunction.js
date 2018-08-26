@@ -1,5 +1,5 @@
 const async = require('async');
-const connection = require('../config/database.config');
+const connection = require('../../config/database.config');
 var sendResponse = require('./sendresponse');
 
 // check email is valid or not

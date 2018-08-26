@@ -11,7 +11,7 @@ var func = require('../../common/commonfunction'); // call common fuctions
 var sendResponse = require('../../common/sendresponse'); // send response to user
 
 // Api call
-router.post('/register', (req, res) => {
+router.post('/addProduct', (req, res) => {
     console.log('Inside admin file');
     var manValues = [req.body.firstName, req.body.lastName, req.body.mobileNumber, req.body.emailId, req.body.password];
 

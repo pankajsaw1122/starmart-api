@@ -8,6 +8,7 @@ const app = express();
 app.use(cors());  
 //Load routes
 const admin = require('./routes/api/admin/admin');
+const products = require('./routes/api/products/products');
 // const imageUpload = require('./routes/api/uploads/imageUpload');
 // const student = require('./routes/api/student/student');
 // const fees = require('./routes/api/fees/fees');
@@ -29,16 +30,27 @@ app.get('/', (req, res) => {
     });
 });
 // test
-app.get('/test', (req, res) => {
-    res.render('test');
+app.get('/admin', (req, res) => {
+    res.render('admin');
+});
+
+// test
+app.get('/products', (req, res) => {
+    res.render('products');
 });
 
 // use routes
-app.post('/adminRegister', admin);
-app.post('/adminLogin', admin);
-app.post('/adminChangePassword', admin);
-app.post('/adminForgetPassword', admin);
-app.post('/adminResetPassword', admin);
+app.use('/admin', admin);
+app.use('/products', products);
+// app.post('/adminRegister', admin);
+// app.post('/adminLogin', admin);
+// app.post('/adminChangePassword', admin);
+// app.post('/adminForgetPassword', admin);
+// app.post('/adminResetPassword', admin);
+// app.post('/verifyOtp', admin);
+// app.get('/getData', admin);
+
+
 
 // app.use('/update', update);
 // app.post('/imageUpload', imageUpload);

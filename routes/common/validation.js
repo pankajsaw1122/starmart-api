@@ -15,11 +15,15 @@ const loginSchema = Joi.object().keys({
 });
 
 const changePasswordSchema = Joi.object().keys({
-    id: Joi.number().integer().required().required(),
+    id: Joi.number().integer().required(),
     currentPassword: Joi.string().required(),
     newPassword: Joi.string().regex(/^(?=.*\d).{6,12}$/).required(),
 });
 
+const otpSchema = Joi.object().keys({
+    id: Joi.number().integer().required(),
+    otp: Joi.number().integer().required()
+});
 exports.validateAdminRegister = function (res, values, callback) {
     console.log('inside joi validation');
     Joi.validate({ firstName: values[0], lastName: values[1], mobileNumber: values[2], emailId: values[3], password: values[4] }, adminSchema, function (err, value) {
@@ -59,6 +63,18 @@ exports.validateChangePassword = function (res, values, callback) {
 exports.validateForgetPassword = function(res, values, callback) {
     console.log('inside joi validation');
     Joi.validate(values, [Joi.string().email({ minDomainAtoms: 2 }), Joi.string().regex(/^\d{10}$/)], { presence: "required" }, function (err, value) {
+        if (err) {
+            console.log(err);
+            sendResponse.sendErrorMessage('Some Parameter Missing or invalid input', res);
+        } else {
+            callback(null);
+        }
+    });
+}
+
+exports.validateOtp = function(res, values, callback) {
+    console.log('inside joi validation');
+    Joi.validate({ id: values[0], otp: values[1] }, otpSchema, function (err, value) {
         if (err) {
             console.log(err);
             sendResponse.sendErrorMessage('Some Parameter Missing or invalid input', res);
