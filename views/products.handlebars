@@ -40,6 +40,11 @@
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td>accessToken</td>
+                                        <td>String</td>
+                                        <td>Access Token of admin</td>
+                                    </tr>
+                                    <tr>
                                         <td>departmentId</td>
                                         <td>Int</td>
                                         <td>ID of department</td>
@@ -54,15 +59,21 @@
                                         <td>Int</td>
                                         <td>ID of sub Category</td>
                                     </tr>
+                                    {{!--
+                                    <tr>
+                                        <td>productId</td>
+                                        <td>String</td>
+                                        <td>id of product</td>
+                                    </tr> --}}
                                     <tr>
                                         <td>productName</td>
                                         <td>String</td>
                                         <td>Name of product</td>
                                     </tr>
                                     <tr>
-                                        <td>brand</td>
+                                        <td>brandId</td>
                                         <td>String</td>
-                                        <td>brand of product</td>
+                                        <td>id of brand of product</td>
                                     </tr>
                                     <tr>
                                         <td>description</td>
@@ -80,14 +91,14 @@
                                         <td>Sale Price of Product</td>
                                     </tr>
                                     <tr>
-                                        <td>taxStatus</td>
+                                        <td>taxStatusId</td>
                                         <td>Double</td>
-                                        <td>Sale Price of Product</td>
+                                        <td>id of tax status</td>
                                     </tr>
                                     <tr>
-                                        <td>taxClass</td>
+                                        <td>taxClassId</td>
                                         <td>Double</td>
-                                        <td>Sale Price of Product</td>
+                                        <td>id of tax calss</td>
                                     </tr>
                                     <tr>
                                         <td>sku</td>
@@ -100,9 +111,9 @@
                                         <td>Stock of Product</td>
                                     </tr>
                                     <tr>
-                                        <td>stockStatus</td>
+                                        <td>stockStatusId</td>
                                         <td>String</td>
-                                        <td>Stock status of Product</td>
+                                        <td>id of Stock status</td>
                                     </tr>
                                     <tr>
                                         <td>soldIndv</td>
@@ -120,9 +131,9 @@
                                         <td>Dimension of Product</td>
                                     </tr>
                                     <tr>
-                                        <td>shippingClass</td>
-                                        <td>String</td>
-                                        <td>Shipping class of Product</td>
+                                        <td>shippingClassId</td>
+                                        <td>Number</td>
+                                        <td> id of Shipping class of Product</td>
                                     </tr>
                                     <tr>
                                         <td>upsells</td>
@@ -135,10 +146,36 @@
                                         <td>----</td>
                                     </tr>
                                     <tr>
-                                        <td>productImage</td>
+                                        <td>longDescription</td>
                                         <td>String</td>
-                                        <td>path of image</td>
+                                        <td>Complete Description of Product</td>
                                     </tr>
+                                    <tr>
+                                        <td>additionalInfo</td>
+                                        <td>String</td>
+                                        <td>Additional Description of Product(ex: Ingredients)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>help</td>
+                                        <td>String</td>
+                                        <td>Help Text</td>
+                                    </tr>
+                                    <tr>
+                                        <td>tags</td>
+                                        <td>Int</td>
+                                        <td>id of tag on product</td>
+                                    </tr>
+                                    {{!--
+                                    <tr>
+                                        <td>mainImage</td>
+                                        <td>String</td>
+                                        <td>path of main image</td>
+                                    </tr>
+                                    <tr>
+                                        <td>auxillaryImage</td>
+                                        <td>String</td>
+                                        <td>path of auxillary image</td>
+                                    </tr> --}}
                                 </tbody>
                             </table>
                         </div>
@@ -147,6 +184,9 @@
                         </p>
                         <div class="form-container">
                             <form class="form-inline" enctype="multipart/form-data" action="/products/addProducts" method="POST">
+                                <label class="pad12">accessToken:</label>
+                                <input type="text" class="form-control" name="accessToken">
+
                                 <label class="pad12">departmentId:</label>
                                 <input type="number" class="form-control" name="departmentId">
 
@@ -154,19 +194,72 @@
                                 <input type="number" class="form-control" name="subDepartmentId">
 
                                 <label class="pad12">subCategoryId:</label>
-                                <input type="number" class="form-control" name="subCategoryId">
+                                <input type="number" class="form-control" name="subCategoryId"> {{!-- <label class="pad12">productId:</label>
+                                <input type="number" class="form-control" name="productId"> --}}
 
                                 <label class="pad12">productName:</label>
                                 <input type="email" class="form-control" name="productName">
 
-                                <label class="pad12">netWeight:</label>
-                                <input type="text" class="form-control" name="netWeight">
+                                <label class="pad12">brandId:</label>
+                                <input type="number" class="form-control" name="brandId">
 
                                 <label class="pad12">description:</label>
                                 <input type="text" class="form-control" name="description">
 
-                                <label class="pad12">productImage:</label>
-                                <input type="file" id="productImage" name="productImage" />
+                                <label class="pad12">regularPrice:</label>
+                                <input type="text" class="form-control" name="regularPrice">
+
+                                <label class="pad12">salePrice:</label>
+                                <input type="text" class="form-control" name="salePrice">
+
+                                <label class="pad12">taxStatusId:</label>
+                                <input type="number" class="form-control" name="taxStatusId">
+
+                                <label class="pad12">taxClassId:</label>
+                                <input type="number" class="form-control" name="taxClassId">
+
+                                <label class="pad12">sku:</label>
+                                <input type="text" class="form-control" name="sku">
+
+                                <label class="pad12">manageStock:</label>
+                                <input type="text" class="form-control" name="manageStock">
+
+                                <label class="pad12">stockStatusId:</label>
+                                <input type="number" class="form-control" name="stockStatusId">
+
+                                <label class="pad12">soldIndv:</label>
+                                <input type="text" class="form-control" name="soldIndv">
+
+                                <label class="pad12">weight:</label>
+                                <input type="text" class="form-control" name="weight">
+
+                                <label class="pad12">dimension:</label>
+                                <input type="text" class="form-control" name="dimension">
+
+                                <label class="pad12">shippingClassId:</label>
+                                <input type="number" class="form-control" name="shippingClassId">
+
+                                <label class="pad12">upsells:</label>
+                                <input type="text" class="form-control" name="upsells">
+
+                                <label class="pad12">crossSells:</label>
+                                <input type="text" class="form-control" name="crossSells">
+
+                                <label class="pad12">longDescription:</label>
+                                <input type="text" class="form-control" name="longDescription">
+
+                                <label class="pad12">additionalInfo:</label>
+                                <input type="text" class="form-control" name="additionalInfo">
+
+                                <label class="pad12">help:</label>
+                                <input type="text" class="form-control" name="help">
+
+                                <label class="pad12">tags:</label>
+                                <input type="number" class="form-control" name="tags"> {{!-- <label class="pad12">mainImage:</label>
+                                <input type="file" id="mainImage" name="mainImage" />
+
+                                <label class="pad12">auxillaryImage:</label>
+                                <input type="file" id="auxillaryImage" name="auxillaryImage" /> --}}
 
                                 <button type="submit" class="btn btn-primary left-marg">Submit</button>
                             </form>
@@ -176,23 +269,24 @@
                 </div>
             </div>
 
+
             <div class="card marg-top">
                 <div class="card-header">
-                    <h6>Admin Login</h6>
+                    <h6>get Products list</h6>
                 </div>
                 <div class="card-body">
                     <div class="content">
                         <p>
                             <span class="left-text"> URL: </span>
-                            <span class="right-text"> /admin/login</span>
+                            <span class="right-text">/products</span>
                         </p>
                         <p>
                             <span class="left-text"> Method: </span>
-                            <span class="right-text"> POST</span>
+                            <span class="right-text"> GET</span>
                         </p>
                         <p>
                             <span class="left-text"> Description: </span>
-                            <span class="right-text"> to login admin into admin panel</span>
+                            <span class="right-text"> Get list of products </span>
                         </p>
                         <div class="table-container">
                             <table class="table table-bordered">
@@ -205,248 +299,14 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>emailOrMobile</td>
-                                        <td>String</td>
-                                        <td>Email id or Mobile Number of admin</td>
-                                    </tr>
-                                    <tr>
-                                        <td>password</td>
-                                        <td>String</td>
-                                        <td>Password of admin</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <p>
-                            <span class="left-text"> Test: </span>
-                        </p>
-                        <div class="form-container">
-                            <form class="form-inline" action="/admin/login" method="POST">
-                                <label class="pad12">emailOrMobile:</label>
-                                <input type="text" class="form-control" name="emailOrMobile">
-                                <label class="pad12" for="pwd">password:</label>
-                                <input type="password" class="form-control" name="password">
-                                <button type="submit" class="btn btn-primary left-marg">Submit</button>
-                            </form>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="card marg-top">
-                <div class="card-header">
-                    <h6>Change Password</h6>
-                </div>
-                <div class="card-body">
-                    <div class="content">
-                        <p>
-                            <span class="left-text"> URL: </span>
-                            <span class="right-text"> /admin/changePassword</span>
-                        </p>
-                        <p>
-                            <span class="left-text"> Method: </span>
-                            <span class="right-text"> POST</span>
-                        </p>
-                        <p>
-                            <span class="left-text"> Description: </span>
-                            <span class="right-text"> to change password of admin</span>
-                        </p>
-                        <div class="table-container">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Field</th>
-                                        <th>Type</th>
-                                        <th>Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>adminId</td>
-                                        <td>int</td>
-                                        <td>id of admin</td>
-                                    </tr>
-                                    <tr>
-                                        <td>currentPassword</td>
-                                        <td>String</td>
-                                        <td>Password of admin</td>
-                                    </tr>
-                                    <tr>
-                                        <td>newPassword</td>
-                                        <td>String</td>
-                                        <td>Password of admin</td>
-                                    </tr>
-                                    <tr>
-                                        <td>confirmPassword</td>
-                                        <td>String</td>
-                                        <td>Password of admin</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <p>
-                            <span class="left-text"> Test: </span>
-                        </p>
-                        <div class="form-container">
-                            <form class="form-inline" action="/admin/changePassword" method="POST">
-                                <label class="pad12">adminId:</label>
-                                <input type="text" class="form-control" name="adminId">
-
-                                <label class="pad12" for="pwd">currentPassword:</label>
-                                <input type="password" class="form-control" name="currentPassword">
-
-                                <label class="pad12" for="pwd">newPassword:</label>
-                                <input type="password" class="form-control" name="newPassword">
-
-                                <button type="submit" class="btn btn-primary left-marg">Submit</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card marg-top">
-                <div class="card-header">
-                    <h6>Forget Password</h6>
-                </div>
-                <div class="card-body">
-                    <div class="content">
-                        <p>
-                            <span class="left-text"> URL: </span>
-                            <span class="right-text"> /admin/forgetPassword</span>
-                        </p>
-                        <p>
-                            <span class="left-text"> Method: </span>
-                            <span class="right-text"> POST</span>
-                        </p>
-                        <p>
-                            <span class="left-text"> Description: </span>
-                            <span class="right-text"> If admin forgets the password </span>
-                        </p>
-                        <div class="table-container">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Field</th>
-                                        <th>Type</th>
-                                        <th>Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>emailOrMobile</td>
-                                        <td>String</td>
-                                        <td>Email id or Mobile number of admin</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <p>
-                            <span class="left-text"> Test: </span>
-                        </p>
-                        <div class="form-container">
-                            <form class="form-inline" action="/admin/forgetPassword" method="POST">
-                                <label class="pad12">emailOrMobile:</label>
-                                <input type="text" class="form-control" name="emailOrMobile">
-
-                                <button type="submit" class="btn btn-primary left-marg">Submit</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div class="card marg-top">
-                <div class="card-header">
-                    <h6>Forget Password</h6>
-                </div>
-                <div class="card-body">
-                    <div class="content">
-                        <p>
-                            <span class="left-text"> URL: </span>
-                            <span class="right-text"> /admin/forgetPassword</span>
-                        </p>
-                        <p>
-                            <span class="left-text"> Method: </span>
-                            <span class="right-text"> POST</span>
-                        </p>
-                        <p>
-                            <span class="left-text"> Description: </span>
-                            <span class="right-text"> If admin forgets the password </span>
-                        </p>
-                        <div class="table-container">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Field</th>
-                                        <th>Type</th>
-                                        <th>Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>emailOrMobile</td>
-                                        <td>String</td>
-                                        <td>Email id or Mobile number of admin</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <p>
-                            <span class="left-text"> Test: </span>
-                        </p>
-                        <div class="form-container">
-                            <form class="form-inline" action="/admin/forgetPassword" method="POST">
-                                <label class="pad12">emailOrMobile:</label>
-                                <input type="text" class="form-control" name="emailOrMobile">
-
-                                <button type="submit" class="btn btn-primary left-marg">Submit</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card marg-top">
-                <div class="card-header">
-                    <h6>verify otp</h6>
-                </div>
-                <div class="card-body">
-                    <div class="content">
-                        <p>
-                            <span class="left-text"> URL: </span>
-                            <span class="right-text"> /admin/verifyOtp</span>
-                        </p>
-                        <p>
-                            <span class="left-text"> Method: </span>
-                            <span class="right-text"> POST</span>
-                        </p>
-                        <p>
-                            <span class="left-text"> Description: </span>
-                            <span class="right-text"> verify otp </span>
-                        </p>
-                        <div class="table-container">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Field</th>
-                                        <th>Type</th>
-                                        <th>Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>userId</td>
+                                        <td>departmentId</td>
                                         <td>Int</td>
-                                        <td>id of user</td>
+                                        <td>id of department to filter product by department</td>
                                     </tr>
                                     <tr>
-                                        <td>otp</td>
+                                        <td>subDepartmentId</td>
                                         <td>Int</td>
-                                        <td>otp sent to registered email or mobile number</td>
+                                        <td>id of sub department to filter product by department</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -455,29 +315,30 @@
                             <span class="left-text"> Test: </span>
                         </p>
                         <div class="form-container">
-                            <form class="form-inline" action="/admin/verifyOtp" method="POST">
-                                <label class="pad12">userId:</label>
-                                <input type="number" class="form-control" name="userId">
+                            <form class="form-inline" action="/products" method="GET">
+                                <label class="pad12">departmentId:</label>
+                                <input type="number" class="form-control" name="departmentId">
 
-                                <label class="pad12">otp:</label>
-                                <input type="number" class="form-control" name="otp">
+                                <label class="pad12">subDepartmentId:</label>
+                                <input type="number" class="form-control" name="subDepartmentId">
 
-                                <button type="submit" class="btn btn-primary left-marg">Submit</button>
+                                <button type="submit" class="btn btn-primary left-marg">GET</button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="card marg-top">
+
+            <div class="card">
                 <div class="card-header">
-                    <h6>Reset Password</h6>
+                    <h6>Update/Edit Product</h6>
                 </div>
                 <div class="card-body">
                     <div class="content">
                         <p>
                             <span class="left-text"> URL: </span>
-                            <span class="right-text"> /admin/resetPassword</span>
+                            <span class="right-text"> /product/addProduct</span>
                         </p>
                         <p>
                             <span class="left-text"> Method: </span>
@@ -485,7 +346,10 @@
                         </p>
                         <p>
                             <span class="left-text"> Description: </span>
-                            <span class="right-text"> If admin forgets the password then create new password </span>
+                            <span class="right-text"> to add products</span>
+                        </p>
+                        <p>
+                            <span class="left-text"> Parameter: </span>
                         </p>
                         <div class="table-container">
                             <table class="table table-bordered">
@@ -498,19 +362,272 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>userId</td>
+                                        <td>accessToken</td>
                                         <td>String</td>
-                                        <td>id of admin</td>
+                                        <td>Access Token of admin</td>
                                     </tr>
                                     <tr>
-                                        <td>password</td>
-                                        <td>String</td>
-                                        <td>Password of admin</td>
+                                        <td>departmentId</td>
+                                        <td>Int</td>
+                                        <td>ID of department</td>
                                     </tr>
                                     <tr>
-                                        <td>confirmPassword</td>
+                                        <td>subDepartmentId</td>
+                                        <td>Int</td>
+                                        <td>ID of sub department</td>
+                                    </tr>
+                                    <tr>
+                                        <td>subCategoryId</td>
+                                        <td>Int</td>
+                                        <td>ID of sub Category</td>
+                                    </tr>
+                                    {{!--
+                                    <tr>
+                                        <td>productId</td>
                                         <td>String</td>
-                                        <td>Password of admin</td>
+                                        <td>id of product</td>
+                                    </tr> --}}
+                                    <tr>
+                                        <td>productName</td>
+                                        <td>String</td>
+                                        <td>Name of product</td>
+                                    </tr>
+                                    <tr>
+                                        <td>brandId</td>
+                                        <td>String</td>
+                                        <td>id of brand of product</td>
+                                    </tr>
+                                    <tr>
+                                        <td>description</td>
+                                        <td>String</td>
+                                        <td>Discription of Product</td>
+                                    </tr>
+                                    <tr>
+                                        <td>regularPrice</td>
+                                        <td>Double</td>
+                                        <td>Regular Price of Product</td>
+                                    </tr>
+                                    <tr>
+                                        <td>salePrice</td>
+                                        <td>Double</td>
+                                        <td>Sale Price of Product</td>
+                                    </tr>
+                                    <tr>
+                                        <td>taxStatusId</td>
+                                        <td>Double</td>
+                                        <td>id of tax status</td>
+                                    </tr>
+                                    <tr>
+                                        <td>taxClassId</td>
+                                        <td>Double</td>
+                                        <td>id of tax calss</td>
+                                    </tr>
+                                    <tr>
+                                        <td>sku</td>
+                                        <td>Double</td>
+                                        <td>sku of Product</td>
+                                    </tr>
+                                    <tr>
+                                        <td>manageStock</td>
+                                        <td>Boolean</td>
+                                        <td>Stock of Product</td>
+                                    </tr>
+                                    <tr>
+                                        <td>stockStatusId</td>
+                                        <td>String</td>
+                                        <td>id of Stock status</td>
+                                    </tr>
+                                    <tr>
+                                        <td>soldIndv</td>
+                                        <td>Boolean</td>
+                                        <td>Sold Individually Product</td>
+                                    </tr>
+                                    <tr>
+                                        <td>weight</td>
+                                        <td>String</td>
+                                        <td>Weight (kg) of Product</td>
+                                    </tr>
+                                    <tr>
+                                        <td>dimension</td>
+                                        <td>String</td>
+                                        <td>Dimension of Product</td>
+                                    </tr>
+                                    <tr>
+                                        <td>shippingClassId</td>
+                                        <td>Number</td>
+                                        <td> id of Shipping class of Product</td>
+                                    </tr>
+                                    <tr>
+                                        <td>upsells</td>
+                                        <td>String</td>
+                                        <td>---</td>
+                                    </tr>
+                                    <tr>
+                                        <td>crossSells</td>
+                                        <td>String</td>
+                                        <td>----</td>
+                                    </tr>
+                                    <tr>
+                                        <td>longDescription</td>
+                                        <td>String</td>
+                                        <td>Complete Description of Product</td>
+                                    </tr>
+                                    <tr>
+                                        <td>additionalInfo</td>
+                                        <td>String</td>
+                                        <td>Additional Description of Product(ex: Ingredients)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>help</td>
+                                        <td>String</td>
+                                        <td>Help Text</td>
+                                    </tr>
+                                    <tr>
+                                        <td>tags</td>
+                                        <td>Int</td>
+                                        <td>id of tag on product</td>
+                                    </tr>
+                                    {{!--
+                                    <tr>
+                                        <td>mainImage</td>
+                                        <td>String</td>
+                                        <td>path of main image</td>
+                                    </tr>
+                                    <tr>
+                                        <td>auxillaryImage</td>
+                                        <td>String</td>
+                                        <td>path of auxillary image</td>
+                                    </tr> --}}
+                                </tbody>
+                            </table>
+                        </div>
+                        <p>
+                            <span class="left-text"> Test: </span>
+                        </p>
+                        <div class="form-container">
+                            <form class="form-inline" enctype="multipart/form-data" action="/products/updateProducts" method="POST">
+                                <label class="pad12">accessToken:</label>
+                                <input type="text" class="form-control" name="accessToken">
+
+                                <label class="pad12">departmentId:</label>
+                                <input type="number" class="form-control" name="departmentId">
+
+                                <label class="pad12">subDepartmentId:</label>
+                                <input type="number" class="form-control" name="subDepartmentId">
+
+                                <label class="pad12">subCategoryId:</label>
+                                <input type="number" class="form-control" name="subCategoryId"> {{!-- <label class="pad12">productId:</label>
+                                <input type="number" class="form-control" name="productId"> --}}
+
+                                <label class="pad12">productName:</label>
+                                <input type="email" class="form-control" name="productName">
+
+                                <label class="pad12">brandId:</label>
+                                <input type="number" class="form-control" name="brandId">
+
+                                <label class="pad12">description:</label>
+                                <input type="text" class="form-control" name="description">
+
+                                <label class="pad12">regularPrice:</label>
+                                <input type="text" class="form-control" name="regularPrice">
+
+                                <label class="pad12">salePrice:</label>
+                                <input type="text" class="form-control" name="salePrice">
+
+                                <label class="pad12">taxStatusId:</label>
+                                <input type="number" class="form-control" name="taxStatusId">
+
+                                <label class="pad12">taxClassId:</label>
+                                <input type="number" class="form-control" name="taxClassId">
+
+                                <label class="pad12">sku:</label>
+                                <input type="text" class="form-control" name="sku">
+
+                                <label class="pad12">manageStock:</label>
+                                <input type="text" class="form-control" name="manageStock">
+
+                                <label class="pad12">stockStatusId:</label>
+                                <input type="number" class="form-control" name="stockStatusId">
+
+                                <label class="pad12">soldIndv:</label>
+                                <input type="text" class="form-control" name="soldIndv">
+
+                                <label class="pad12">weight:</label>
+                                <input type="text" class="form-control" name="weight">
+
+                                <label class="pad12">dimension:</label>
+                                <input type="text" class="form-control" name="dimension">
+
+                                <label class="pad12">shippingClassId:</label>
+                                <input type="number" class="form-control" name="shippingClassId">
+
+                                <label class="pad12">upsells:</label>
+                                <input type="text" class="form-control" name="upsells">
+
+                                <label class="pad12">crossSells:</label>
+                                <input type="text" class="form-control" name="crossSells">
+
+                                <label class="pad12">longDescription:</label>
+                                <input type="text" class="form-control" name="longDescription">
+
+                                <label class="pad12">additionalInfo:</label>
+                                <input type="text" class="form-control" name="additionalInfo">
+
+                                <label class="pad12">help:</label>
+                                <input type="text" class="form-control" name="help">
+
+                                <label class="pad12">tags:</label>
+                                <input type="number" class="form-control" name="tags"> {{!-- <label class="pad12">mainImage:</label>
+                                <input type="file" id="mainImage" name="mainImage" />
+
+                                <label class="pad12">auxillaryImage:</label>
+                                <input type="file" id="auxillaryImage" name="auxillaryImage" /> --}}
+
+                                <button type="submit" class="btn btn-primary left-marg">Submit</button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="card marg-top">
+                <div class="card-header">
+                    <h6>delete Product</h6>
+                </div>
+                <div class="card-body">
+                    <div class="content">
+                        <p>
+                            <span class="left-text"> URL: </span>
+                            <span class="right-text">/deleteProduct</span>
+                        </p>
+                        <p>
+                            <span class="left-text"> Method: </span>
+                            <span class="right-text">POST</span>
+                        </p>
+                        <p>
+                            <span class="left-text"> Description: </span>
+                            <span class="right-text"> delete product from list </span>
+                        </p>
+                        <div class="table-container">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Field</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>accessToken</td>
+                                        <td>String</td>
+                                        <td>Access Token of admin</td>
+                                    </tr>
+                                    <tr>
+                                        <td>productId</td>
+                                        <td>Int</td>
+                                        <td>id of product</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -519,17 +636,14 @@
                             <span class="left-text"> Test: </span>
                         </p>
                         <div class="form-container">
-                            <form class="form-inline" action="/admin/resetPassword" method="POST">
-                                <label class="pad12">userId:</label>
-                                <input type="email" class="form-control" name="userId">
+                            <form class="form-inline" action="/deleteProduct" method="POST">
+                                <label class="pad12">accessToken:</label>
+                                <input type="text" class="form-control" name="accessToken">
 
-                                <label class="pad12" for="pwd">password:</label>
-                                <input type="password" class="form-control" name="password">
+                                <label class="pad12">productId:</label>
+                                <input type="number" class="form-control" name="productId">
 
-                                <label class="pad12" for="pwd">confirmPassword:</label>
-                                <input type="password" class="form-control" name="confirmPassword">
-
-                                <button type="submit" class="btn btn-primary left-marg">Submit</button>
+                                <button type="submit" class="btn btn-primary left-marg">Delete</button>
                             </form>
                         </div>
                     </div>

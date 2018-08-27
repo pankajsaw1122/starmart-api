@@ -50,8 +50,6 @@ app.use('/products', products);
 // app.post('/verifyOtp', admin);
 // app.get('/getData', admin);
 
-
-
 // app.use('/update', update);
 // app.post('/imageUpload', imageUpload);
 // app.post('/registerAdmin', admin);

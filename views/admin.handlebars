@@ -187,9 +187,9 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>adminId</td>
-                                        <td>int</td>
-                                        <td>id of admin</td>
+                                        <td>accessToken</td>
+                                        <td>String</td>
+                                        <td>accessToken of admin</td>
                                     </tr>
                                     <tr>
                                         <td>currentPassword</td>
@@ -214,8 +214,9 @@
                         </p>
                         <div class="form-container">
                             <form class="form-inline" action="/admin/changePassword" method="POST">
-                                <label class="pad12">adminId:</label>
-                                <input type="text" class="form-control" name="adminId">
+
+                                <label class="pad12">accessToken:</label>
+                                <input type="text" class="form-control" name="accessToken">
 
                                 <label class="pad12" for="pwd">currentPassword:</label>
                                 <input type="password" class="form-control" name="currentPassword">
@@ -229,59 +230,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="card marg-top">
-                <div class="card-header">
-                    <h6>Forget Password</h6>
-                </div>
-                <div class="card-body">
-                    <div class="content">
-                        <p>
-                            <span class="left-text"> URL: </span>
-                            <span class="right-text"> /admin/forgetPassword</span>
-                        </p>
-                        <p>
-                            <span class="left-text"> Method: </span>
-                            <span class="right-text"> POST</span>
-                        </p>
-                        <p>
-                            <span class="left-text"> Description: </span>
-                            <span class="right-text"> If admin forgets the password </span>
-                        </p>
-                        <div class="table-container">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Field</th>
-                                        <th>Type</th>
-                                        <th>Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>emailOrMobile</td>
-                                        <td>String</td>
-                                        <td>Email id or Mobile number of admin</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <p>
-                            <span class="left-text"> Test: </span>
-                        </p>
-                        <div class="form-container">
-                            <form class="form-inline" action="/admin/forgetPassword" method="POST">
-                                <label class="pad12">emailOrMobile:</label>
-                                <input type="text" class="form-control" name="emailOrMobile">
-
-                                <button type="submit" class="btn btn-primary left-marg">Submit</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-           
 
             <div class="card marg-top">
                 <div class="card-header">
@@ -393,7 +341,7 @@
                 </div>
             </div>
 
-             <div class="card marg-top">
+            <div class="card marg-top">
                 <div class="card-header">
                     <h6>Reset Password</h6>
                 </div>
@@ -422,9 +370,9 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>userId</td>
+                                        <td>accessToken</td>
                                         <td>String</td>
-                                        <td>id of admin</td>
+                                        <td>accessToken of admin</td>
                                     </tr>
                                     <tr>
                                         <td>password</td>
@@ -444,8 +392,8 @@
                         </p>
                         <div class="form-container">
                             <form class="form-inline" action="/admin/resetPassword" method="POST">
-                                <label class="pad12">userId:</label>
-                                <input type="email" class="form-control" name="userId">
+                                <label class="pad12">accessToken:</label>
+                                <input type="email" class="form-control" name="accessToken">
 
                                 <label class="pad12" for="pwd">password:</label>
                                 <input type="password" class="form-control" name="password">

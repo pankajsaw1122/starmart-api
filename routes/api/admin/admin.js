@@ -89,7 +89,7 @@ router.post('/login', (req, res) => {
 });
 
 router.post('/changePassword', (req, res) => {
-    var manValues = [req.body.adminId, req.body.currentPassword, req.body.newPassword];
+    var manValues = [req.body.accessToken, req.body.currentPassword, req.body.newPassword];
     async.waterfall([
         function (callback) {
             // check empty values
@@ -97,7 +97,7 @@ router.post('/changePassword', (req, res) => {
         },
     ],
         function () {
-            connection.query('select password from admin where id = ?', [req.body.adminId], function (error, results, fields) {
+            connection.query('select password from admin where access_token = ?', [req.body.accessToken], function (error, results, fields) {
                 if (error) {
                     sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err msg if err in finding user                  
                 } else {
@@ -142,15 +142,19 @@ router.post('/forgetPassword', (req, res) => {
                     if (results.length == 0) {
                         sendResponse.sendErrorMessage('incorrect email id or mobile number', res);
                     } else {
-                        let emailId = results[0].email_id;
+                        let adminData = results[0];
                         let post = { user_id: results[0].id, otp_code: Math.floor(Math.random() * 90000), created_at: moment.utc().format("YYYY-MM-DD HH:mm:ss") }
                         connection.query('insert into otp SET ?', post, function (error, results, fields) {
                             if (error) {
                                 console.log(error);
                                 sendResponse.sendErrorMessage('Unable to send otp please try again later', res); // send err msg if err in finding user                  
                             } else {
-                                sendResponse.sendSuccessData('OTP sent to your email id', res);
-                                sendMail.forgetPasswordMail(emailId, results[0].otp_code);
+                                let data = {
+                                    id: adminData.id,
+                                    msg: 'Otp sent to Your email id'
+                                }
+                                sendResponse.sendSuccessData(data, res);
+                                sendMail.forgetPasswordMail(emailId, adminData.otp_code);
                             }
                         })
                     }
@@ -171,14 +175,15 @@ router.post('/verifyOtp', (req, res) => {
     ],
         function () {
             console.log('In forget password');
-            connection.query('select id from otp where user_id = ? AND otp_code = ?', [req.body.userId, req.body.otp], function (error, results, fields) {
+            connection.query('select admin.id, admin.access_token from admin LEFT JOIN otp ON admin.user_id = otp.id where otp.user_id = ? AND otp.otp_code = ?', [req.body.userId, req.body.otp], function (error, results, fields) {
                 if (error) {
                     console.log(error);
                     sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err msg if err in finding user                  
                 } else {
                     if (results.length == 0) {
-                        sendResponse.sendErrorMessage('Otp not mached please try again later', res);
+                        sendResponse.sendErrorMessage('Otp not matched please try again later', res);
                     } else {
+                        // task is pending here...........(check result data and change response data)
                         sendResponse.sendSuccessData('OTP matched', res);
                     }
                 }
@@ -187,6 +192,30 @@ router.post('/verifyOtp', (req, res) => {
     )
 });
 
+
+router.post('/resetPassword', (req, res) => {
+    let manValues = [req.body.accessToken, req.body.password];
+    async.waterfall([
+        function (callback) {
+            // check empty values
+            validate.validateResetPassword(res, manValues, callback);
+        },
+    ],
+        function () {
+            console.log('In forget password');
+            bcrypt.hash(req.body.password, 10).then(function (hash) {
+                connection.query('update admin set password = ? where access_token = ? ', [hash, req.body.accessToken], function (error, results, fields) {
+                    if (error) {
+                        console.log(error);
+                        sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err msg if err in finding user                  
+                    } else {
+                        sendResponse.sendSuccessData('Password changed successfully', res);
+                    }
+                })
+            })
+        }
+    )
+});
 
 module.exports = router;
 

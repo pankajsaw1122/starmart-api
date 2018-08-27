@@ -13,180 +13,204 @@ var sendResponse = require('../../common/sendresponse'); // send response to use
 // Api call
 router.post('/addProduct', (req, res) => {
     console.log('Inside admin file');
-    var manValues = [req.body.firstName, req.body.lastName, req.body.mobileNumber, req.body.emailId, req.body.password];
+    let manValues = [
+        req.body.departmentId,
+        req.body.subDepartmentId,
+        req.body.subCategoryId,
+        // req.body.productId,
+        req.body.productName,
+        req.body.brandId,
+        req.body.description,
+        req.body.regularPrice,
+        req.body.salePrice,
+        req.body.taxStatusId,
+        req.body.taxClassId,
+        req.body.sku,
+        req.body.manageStock,
+        req.body.stockStatusId,
+        req.body.soldIndv,
+        req.body.weight,
+        req.body.dimension,
+        req.body.shippingClassId,
+        req.body.upsells,
+        req.body.crossSells,
+        req.body.longDescription,
+        req.body.additionalInfo,
+        req.body.help,
+        req.body.tags,
+        // req.body.mainImage,
+        // req.body.auxillaryImage
+    ];
 
     async.waterfall([
         function (callback) {
+            // check for unauthorized request
+            func.checkAuth(res, req.body.accessToken, callback);
+        },
+        function (callback) {
             // check empty or invalid values
-            validate.validateAdminRegister(res, manValues, callback);
+            validate.validateProduct(res, manValues, callback);
         },
         function (callback) {
             // check if user allready registered
-            func.checkAlreadyRegistered(res, req.body.mobileNumber, req.body.emailId, callback);
+            func.checkExistingProduct(res, req.body.productName, callback);
         },
     ],
         function () {
-            bcrypt.hash(req.body.password, 10).then(function (hash) {
-                var post = { access_token: randomstring.generate(12), first_name: req.body.firstName, last_name: req.body.lastName, email_id: req.body.emailId, password: hash, mobile_number: req.body.mobileNumber, created_at: moment.utc().format("YYYY-MM-DD HH:mm:ss") };
-                connection.query('INSERT INTO admin SET ?', post, function (error, results, fields) {
+            let post = {
+                department_id: req.body.departmentId,
+                subDepartment_id: req.body.subDepartmentId,
+                subCategory_Id: req.body.subCategoryId,
+                // product_id: req.body.productId,
+                product_name: req.body.productName,
+                brand_id: req.body.brandId,
+                description: req.body.description,
+                regular_price: req.body.regularPrice,
+                sale_price: req.body.salePrice,
+                taxstatus_id: req.body.taxStatusId,
+                taxclass_id: req.body.taxClassId,
+                sku: req.body.sku,
+                manage_stock: req.body.manageStock,
+                stockstatus_id: req.body.stockStatusId,
+                sold_indvidual: req.body.soldIndv,
+                weight: req.body.weight,
+                dimension: req.body.dimension,
+                shippingclass_id: req.body.shippingClassId,
+                upsells: req.body.upsells,
+                cross_sells: req.body.crossSells,
+                long_description: req.body.longDescription,
+                additional_info: req.body.additionalInfo,
+                help: req.body.help,
+                tags: req.body.tags,
+                created_at: moment.utc().format("YYYY-MM-DD HH:mm:ss")
+            };
+            connection.query('INSERT INTO products SET ?', post, function (error, results, fields) {
+                if (error) {
+                    console.log(error);
+                    sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err message if unable to save data 
+                } else {
+                    console.log(results);
+                    sendResponse.sendSuccessData('Product saved successfully', res); // send successfull data submission response
+                }
+            });
+        }
+    )
+});
+
+router.get('/', (req, res) => {
+    let query = '';
+    let param = [];
+    if (req.query.departmentId && !req.query.subDepartmenId) {
+        query = 'select * from products where department_id = ?';
+        param.push(req.query.departmentId);
+    } else if (!req.query.departmentId && req.query.subDepartmenId) {
+        query = 'select * from products where sub_department_id = ?';
+        param.push(req.query.subDepartmenId);
+    } else if (req.query.departmentId && req.query.subDepartmenId) {
+        query = 'select * from products where department_id = ?, sub_department_id = ?';
+        param = [req.query.departmentId, req.query.subDepartmenId];
+    } else {
+        query = 'select * from products';
+    }
+    connection.query(query, param, function (error, results, fields) {
+        if (error) {
+            console.log(error);
+            sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err message if unable to save data 
+        } else {
+            console.log(results);
+            sendResponse.sendSuccessData('Product saved successfully', res); // send successfull data submission response
+        }
+    });
+})
+
+// Api call
+router.post('/updateProduct', (req, res) => {
+    console.log('Inside admin file');
+    let manValues = [
+        req.body.departmentId,
+        req.body.subDepartmentId,
+        req.body.subCategoryId,
+        // req.body.productId,
+        req.body.productName,
+        req.body.brandId,
+        req.body.description,
+        req.body.regularPrice,
+        req.body.salePrice,
+        req.body.taxStatusId,
+        req.body.taxClassId,
+        req.body.sku,
+        req.body.manageStock,
+        req.body.stockStatusId,
+        req.body.soldIndv,
+        req.body.weight,
+        req.body.dimension,
+        req.body.shippingClassId,
+        req.body.upsells,
+        req.body.crossSells,
+        req.body.longDescription,
+        req.body.additionalInfo,
+        req.body.help,
+        req.body.tags,
+        // req.body.mainImage,
+        // req.body.auxillaryImage
+    ];
+
+    async.waterfall([
+        function (callback) {
+            // check for unauthorized request
+            func.checkAuth(res, req.body.accessToken, callback);
+        },
+        function (callback) {
+            // check empty or invalid values
+            validate.validateProduct(res, manValues, callback);
+        },
+    ],
+        function () {
+            manValues.push(moment.utc().format("YYYY-MM-DD HH:mm:ss"));
+
+            connection.query('udate products SET subDepartment_id = ?, subCategory_Id = ?,  product_name = ?,' +
+                'brand_id = ?, description = ? description = ?, regular_price = ? ,sale_price = ?,' +
+                'taxstatus_id = ?, taxclass_id = ?, sku = ?, manage_stock = ?, stockstatus_id = ?,' +
+                ' sold_indvidual = ?, weight = ?, dimension = ?, shippingclass_id = ?,' +
+                'upsells = ?, cross_sells = ?, long_description = ?, additional_info = ?, help = ?, tags = ?, updated_at = ?', manvalues, function (error, results, fields) {
                     if (error) {
                         console.log(error);
                         sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err message if unable to save data 
                     } else {
-                        // var toEmail = req.body.email_id;
-                        sendMail.registrationConfirmation(req.body.emailId);
                         console.log(results);
-                        sendResponse.sendSuccessData('Data saved successfully', res); // send successfull data submission response
+                        sendResponse.sendSuccessData('Product updated successfully', res); // send successfull data submission response
                     }
                 });
-            });
         }
     )
 });
 
-// Api call
-router.post('/login', (req, res) => {
-    var manValues = [req.body.emailOrMobile, req.body.password];
+router.post('/deletProduct', (req, res) => {
+    console.log('Inside product file');
 
     async.waterfall([
         function (callback) {
-            // check empty values
-            validate.validateLoginParameter(res, manValues, callback);
+            // check for unauthorized request
+            func.checkAuth(res, req.body.accessToken, callback);
         },
         function (callback) {
-            // check if user registered or not
-            func.checUserExistence(res, req.body.emailOrMobile, callback);
-        }
+            // check empty or invalid values
+            validate.deleteId(res, req.body.productId, callback);
+        },
     ],
         function () {
-            connection.query('SELECT first_name, email_id, mobile_number, access_token, password FROM admin WHERE email_id = ? OR mobile_number = ?', [req.body.emailOrMobile, req.body.emailOrMobile], function (error, results, fields) {
+            connection.query('delete from products where id = ?', [req.body.accessToken], function (error, results, fields) {
                 if (error) {
                     console.log(error);
-                    sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err msg if err in finding user                  
+                    sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err message if unable to save data 
                 } else {
-                    if (results.length == 0) {
-                        sendResponse.sendErrorMessage('Incorrect login credential', res);
-                    } else {
-                        bcrypt.compareSync(req.body.password, results[0].password).then(function (checkPassword) {
-                            if (checkPassword) {
-                                let data = {
-                                    accessToken: results[0].access_token,
-                                    adminName: results[0].first_name,
-                                    adminEmail: results[0].email_id,
-                                    adminMobileNumber: results[0].mobile_number
-                                };
-                                sendResponse.sendSuccessData(data, res); // send user data to client
-                            } else {
-                                sendResponse.sendErrorMessage('Incorrect login credential', res);  // send err msg 
-                            }
-                        });
-
-                    }
+                    console.log(results);
+                    sendResponse.sendSuccessData('Product deleted successfully', res); // send successfull data submission response
                 }
             });
         }
     )
 });
-
-router.post('/changePassword', (req, res) => {
-    var manValues = [req.body.adminId, req.body.currentPassword, req.body.newPassword];
-    async.waterfall([
-        function (callback) {
-            // check empty values
-            validate.validateChangePassword(res, manValues, callback);
-        },
-    ],
-        function () {
-            connection.query('select password from admin where id = ?', [req.body.adminId], function (error, results, fields) {
-                if (error) {
-                    sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err msg if err in finding user                  
-                } else {
-                    if (results.length == 0) {
-                        sendResponse.sendErrorMessage('incorrect id', res);
-                    } else {
-                        const checkPassword = bcrypt.compareSync(req.body.currentPassword, results[0].password);
-                        if (checkPassword) {
-                            connection.query('update admin set password = ? WHERE password = ? AND id = ?', [req.body.newPassword, req.body.currentPassword, req.body.adminId], function (error, results, fields) {
-                                if (error) {
-                                    sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err msg if err in finding user                  
-                                } else {
-                                    sendResponse.sendSuccessData('Password changed Successfully', res);
-                                }
-                            });
-                        } else {
-                            sendResponse.sendErrorMessage('Current password is incorrect', res); // send err msg if err in finding user                  
-                        }
-                    }
-                }
-            })
-        }
-    )
-});
-
-
-router.post('/forgetPassword', (req, res) => {
-    let manValues = req.body.emailOrMobile;
-    async.waterfall([
-        function (callback) {
-            // check empty values
-            validate.validateForgetPassword(res, manValues, callback);
-        },
-    ],
-        function () {
-            console.log('In forget password');
-            connection.query('select id, email_id, mobile_number from admin where email_id = ? OR mobile_number = ?', [req.body.emailOrMobile, req.body.emailOrMobile], function (error, results, fields) {
-                if (error) {
-                    console.log(error);
-                    sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err msg if err in finding user                  
-                } else {
-                    if (results.length == 0) {
-                        sendResponse.sendErrorMessage('incorrect email id or mobile number', res);
-                    } else {
-                        let emailId = results[0].email_id;
-                        let post = { user_id: results[0].id, otp_code: Math.floor(Math.random() * 90000), created_at: moment.utc().format("YYYY-MM-DD HH:mm:ss") }
-                        connection.query('insert into otp SET ?', post, function (error, results, fields) {
-                            if (error) {
-                                console.log(error);
-                                sendResponse.sendErrorMessage('Unable to send otp please try again later', res); // send err msg if err in finding user                  
-                            } else {
-                                sendResponse.sendSuccessData('OTP sent to your email id', res);
-                                sendMail.forgetPasswordMail(emailId, results[0].otp_code);
-                            }
-                        })
-                    }
-                }
-            })
-        }
-    )
-});
-
-
-router.post('/verifyOtp', (req, res) => {
-    let manValues = [req.body.userId, req.body.otp];
-    async.waterfall([
-        function (callback) {
-            // check empty values
-            validate.validateOtp(res, manValues, callback);
-        },
-    ],
-        function () {
-            console.log('In forget password');
-            connection.query('select id from otp where user_id = ? AND otp_code = ?', [req.body.userId, req.body.otp], function (error, results, fields) {
-                if (error) {
-                    console.log(error);
-                    sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err msg if err in finding user                  
-                } else {
-                    if (results.length == 0) {
-                        sendResponse.sendErrorMessage('Otp not mached please try again later', res);
-                    } else {
-                        sendResponse.sendSuccessData('OTP matched', res);
-                    }
-                }
-            })
-        }
-    )
-});
-
 
 module.exports = router;
 
