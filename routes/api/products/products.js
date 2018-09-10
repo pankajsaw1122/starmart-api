@@ -10,6 +10,7 @@ var validate = require('../../common/validation')
 var func = require('../../common/commonfunction'); // call common fuctions
 var sendResponse = require('../../common/sendresponse'); // send response to user
 
+
 // Api call
 router.post('/addProduct', (req, res) => {
     console.log('Inside admin file');
@@ -210,6 +211,46 @@ router.post('/deletProduct', (req, res) => {
             });
         }
     )
+});
+
+router.get('/getTaxStatus', (req, res) => {
+    console.log('Inside tax Status');
+    connection.query('select id, name from tax_status', function (error, results, fields) {
+        if (error) {
+            console.log(error);
+            sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err message if unable to save data 
+        } else {
+            console.log(results);
+            sendResponse.sendSuccessData(results, res); // send successfull data submission response
+        }
+    });
+});
+
+router.get('/getTaxClass', (req, res) => {
+    console.log('Inside tax Status');
+    connection.query('select id, name from tax_class', function (error, results, fields) {
+        if (error) {
+            console.log(error);
+            sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err message if unable to save data 
+        } else {
+            console.log(results);
+            sendResponse.sendSuccessData(results, res); // send successfull data submission response
+        }
+    });
+});
+
+// getStockStatus
+router.get('/getStockStatus', (req, res) => {
+    console.log('Inside tax Status');
+    connection.query('select id, status from stock_status', function (error, results, fields) {
+        if (error) {
+            console.log(error);
+            sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err message if unable to save data 
+        } else {
+            console.log(results);
+            sendResponse.sendSuccessData(results, res); // send successfull data submission response
+        }
+    });
 });
 
 module.exports = router;

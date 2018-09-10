@@ -9,6 +9,8 @@ app.use(cors());
 //Load routes
 const admin = require('./routes/api/admin/admin');
 const products = require('./routes/api/products/products');
+const categories = require('./routes/api/categories/categories');
+
 // const imageUpload = require('./routes/api/uploads/imageUpload');
 // const student = require('./routes/api/student/student');
 // const fees = require('./routes/api/fees/fees');
@@ -42,6 +44,8 @@ app.get('/products', (req, res) => {
 // use routes
 app.use('/admin', admin);
 app.use('/products', products);
+app.use('/categories', categories);
+
 // app.post('/adminRegister', admin);
 // app.post('/adminLogin', admin);
 // app.post('/adminChangePassword', admin);
