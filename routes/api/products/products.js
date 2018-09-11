@@ -14,6 +14,7 @@ var sendResponse = require('../../common/sendresponse'); // send response to use
 // Api call
 router.post('/addProduct', (req, res) => {
     console.log('Inside admin file');
+    console.log(req.body);
     let manValues = [
         req.body.departmentId,
         req.body.subDepartmentId,
@@ -40,7 +41,7 @@ router.post('/addProduct', (req, res) => {
         req.body.longDescription,
         req.body.additionalInfo,
         req.body.help,
-        req.body.tags,
+        req.body.tagId,
         // req.body.mainImage,
         // req.body.auxillaryImage
     ];
@@ -86,7 +87,7 @@ router.post('/addProduct', (req, res) => {
                 long_description: req.body.longDescription,
                 additional_info: req.body.additionalInfo,
                 help: req.body.help,
-                tags: req.body.tags,
+                tag_id: req.body.tagId,
                 created_at: moment.utc().format("YYYY-MM-DD HH:mm:ss")
             };
             connection.query('INSERT INTO products SET ?', post, function (error, results, fields) {
@@ -155,7 +156,7 @@ router.post('/updateProduct', (req, res) => {
         req.body.longDescription,
         req.body.additionalInfo,
         req.body.help,
-        req.body.tags,
+        req.body.tag,
         // req.body.mainImage,
         // req.body.auxillaryImage
     ];
@@ -247,6 +248,20 @@ router.get('/getTaxClass', (req, res) => {
 router.get('/getStockStatus', (req, res) => {
     console.log('Inside tax Status');
     connection.query('select id, status from stock_status', function (error, results, fields) {
+        if (error) {
+            console.log(error);
+            sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err message if unable to save data 
+        } else {
+            console.log(results);
+            sendResponse.sendSuccessData(results, res); // send successfull data submission response
+        }
+    });
+});
+
+// getStockStatus
+router.get('/getTags', (req, res) => {
+    console.log('Inside tax Status');
+    connection.query('select id, tag from tags', function (error, results, fields) {
         if (error) {
             console.log(error);
             sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err message if unable to save data 
