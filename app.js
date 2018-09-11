@@ -1,6 +1,7 @@
 const express = require('express');
 var exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
+const path = require('path');
 const mysql = require('mysql');
 var cors = require('cors')
 const app = express();
@@ -10,6 +11,7 @@ app.use(cors());
 const admin = require('./routes/api/admin/admin');
 const products = require('./routes/api/products/products');
 const categories = require('./routes/api/categories/categories');
+const upload = require('./routes/api/uploads/upload');
 
 // const imageUpload = require('./routes/api/uploads/imageUpload');
 // const student = require('./routes/api/student/student');
@@ -18,7 +20,7 @@ const categories = require('./routes/api/categories/categories');
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-app.use(express.static('./public'));
+app.use(express.static((path.join(__dirname, 'public'))));
 
 //handlebars middleware
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
@@ -45,6 +47,8 @@ app.get('/products', (req, res) => {
 app.use('/admin', admin);
 app.use('/products', products);
 app.use('/categories', categories);
+app.use('/upload', upload);
+
 
 // app.post('/adminRegister', admin);
 // app.post('/adminLogin', admin);
@@ -76,8 +80,6 @@ app.use((req, res, next) => {
         err: err
     });
   });
-
-
 
 const port = 5000;
 app.listen(port, () => {

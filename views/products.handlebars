@@ -666,6 +666,67 @@
                 </div>
             </div>
 
+            <div class="card marg-top">
+                <div class="card-header">
+                    <h6> Product Image upload</h6>
+                </div>
+                <div class="card-body">
+                    <div class="content">
+                        <p>
+                            <span class="left-text"> URL: </span>
+                            <span class="right-text">/product/productImageUpload</span>
+                        </p>
+                        <p>
+                            <span class="left-text"> Method: </span>
+                            <span class="right-text">POST</span>
+                        </p>
+                        <p>
+                            <span class="left-text"> Description: </span>
+                            <span class="right-text"> upload image of product </span>
+                        </p>
+                        <div class="table-container">
+                            {{!-- <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Field</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>accessToken</td>
+                                        <td>String</td>
+                                        <td>Access Token of admin</td>
+                                    </tr>
+                                    <tr>
+                                        <td>productId</td>
+                                        <td>Int</td>
+                                        <td>id of product</td>
+                                    </tr>
+                                </tbody>
+                            </table> --}}
+                        </div>
+                        <p>
+                            <span class="left-text"> Test: </span>
+                        </p>
+                        <div class="form-container">
+                            <form class="form-inline" action="/upload/productMainImage" enctype="multipart/form-data" method="POST">
+                                <label class="pad12">productImage:</label>
+                                <input type="file" class="form-control" name="image">
+
+                                <label class="pad12">departmentId:</label>
+                                <input type="text" class="form-control" name="departmentId">
+
+                                <label class="pad12">categoryId:</label>
+                                <input type="text" class="form-control" name="categoryId">
+
+                                <button type="submit" class="btn btn-primary left-marg">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -4,12 +4,10 @@ var bcrypt = require('bcrypt');
 var randomstring = require("randomstring");
 var moment = require('moment');
 var sendMail = require('../../services/sendMail/emailService');
-const connection = require('../../../config/database.config');
 const router = express.Router();
 var validate = require('../../common/validation')
 var func = require('../../common/commonfunction'); // call common fuctions
 var sendResponse = require('../../common/sendresponse'); // send response to user
-
 
 // Api call
 router.post('/addProduct', (req, res) => {
@@ -149,14 +147,16 @@ router.post('/updateProduct', (req, res) => {
         req.body.stockStatusId,
         req.body.soldIndv,
         req.body.weight,
-        req.body.dimension,
+        req.body.dimensionLength,
+        req.body.dimensionWidth,
+        req.body.dimensionHeight,
         req.body.shippingClassId,
         req.body.upsells,
         req.body.crossSells,
         req.body.longDescription,
         req.body.additionalInfo,
         req.body.help,
-        req.body.tag,
+        req.body.tagId,
         // req.body.mainImage,
         // req.body.auxillaryImage
     ];
@@ -177,8 +177,8 @@ router.post('/updateProduct', (req, res) => {
             connection.query('udate products SET subDepartment_id = ?, subCategory_Id = ?,  product_name = ?,' +
                 'brand_id = ?, description = ? description = ?, regular_price = ? ,sale_price = ?,' +
                 'taxstatus_id = ?, taxclass_id = ?, sku = ?, manage_stock = ?, stockstatus_id = ?,' +
-                ' sold_indvidual = ?, weight = ?, dimension = ?, shippingclass_id = ?,' +
-                'upsells = ?, cross_sells = ?, long_description = ?, additional_info = ?, help = ?, tags = ?, updated_at = ?', manvalues, function (error, results, fields) {
+                ' sold_indvidual = ?, weight = ?, dimension_length = ?, dimension_width = ?, dimension_height = ?, shippingclass_id = ?,' +
+                'upsells = ?, cross_sells = ?, long_description = ?, additional_info = ?, help = ?, tags_id = ?, updated_at = ?', manvalues, function (error, results, fields) {
                     if (error) {
                         console.log(error);
                         sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err message if unable to save data 
