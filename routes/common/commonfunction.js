@@ -6,18 +6,19 @@ var sendResponse = require('./sendresponse');
 exports.checkAuth = function(res, accessToken, callback) {
     if(!accessToken) {
         sendResponse.sendErrorMessage('access token is missing', res);
-    } 
-    connection.query('SELECT id FROM admin WHERE access_token = ?' , [accessToken], function (error, results, fields) {
-        if (error) {
-            sendResponse.sendErrorMessage('Something went wrong please try again later', res);
-        } else {
-            if (results.length === 0) {
-                sendResponse.sendErrorMessage('Unautharized request', res);
+    } else {
+        connection.query('SELECT id FROM admin WHERE access_token = ?' , [accessToken], function (error, results, fields) {
+            if (error) {
+                sendResponse.sendErrorMessage('Something went wrong please try again later', res);
             } else {
-                callback(null);
+                if (results.length === 0) {
+                    sendResponse.sendErrorMessage('Unautharized request', res);
+                } else {
+                    callback(null);
+                }
             }
-        }
-    });
+        });
+    }
 }
 
 // check email is valid or not
@@ -56,9 +57,10 @@ exports.checkExistingProduct = function(res, productName, callback) {
             sendResponse.sendErrorMessage('Something went wrong please try again later', res);
         } else {
             if (results.length === 0) {
-                sendResponse.sendErrorMessage('This Product name already added', res);
+                callback(null);   
             } else {
-                callback(null);                
+                sendResponse.sendErrorMessage('This Product name already added', res);
+
             }
         }
     });

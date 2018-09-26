@@ -1,18 +1,18 @@
 const express = require('express');
 const async = require('async');
-var bcrypt = require('bcrypt');
-var randomstring = require("randomstring");
 var moment = require('moment');
-var sendMail = require('../../services/sendMail/emailService');
 const router = express.Router();
+const connection = require('../../../config/database.config');
 var validate = require('../../common/validation')
 var func = require('../../common/commonfunction'); // call common fuctions
 var sendResponse = require('../../common/sendresponse'); // send response to user
-
+var sendProductList = require('./sendProductList');
 // Api call
 router.post('/addProduct', (req, res) => {
     console.log('Inside admin file');
     console.log(req.body);
+    console.log(req.body.accessToken);
+
     let manValues = [
         req.body.departmentId,
         req.body.subDepartmentId,
@@ -54,32 +54,33 @@ router.post('/addProduct', (req, res) => {
             validate.validateProduct(res, manValues, callback);
         },
         function (callback) {
-            // check if user allready registered
+            // check if product allready added
             func.checkExistingProduct(res, req.body.productName, callback);
         },
     ],
         function () {
+            console.log('Save product');
             let post = {
                 department_id: req.body.departmentId,
-                subDepartment_id: req.body.subDepartmentId,
-                subCategory_Id: req.body.subCategoryId,
+                sub_department_id: req.body.subDepartmentId,
+                sub_category_Id: req.body.subCategoryId,
                 // product_id: req.body.productId,
                 product_name: req.body.productName,
                 brand_id: req.body.brandId,
                 description: req.body.description,
                 regular_price: req.body.regularPrice,
                 sale_price: req.body.salePrice,
-                taxstatus_id: req.body.taxStatusId,
-                taxclass_id: req.body.taxClassId,
+                tax_status_id: req.body.taxStatusId,
+                tax_class_id: req.body.taxClassId,
                 sku: req.body.sku,
                 manage_stock: req.body.manageStock,
-                stockstatus_id: req.body.stockStatusId,
-                sold_indvidual: req.body.soldIndv,
+                stock_status_id: req.body.stockStatusId,
+                sold_individually: req.body.soldIndv,
                 weight: req.body.weight,
                 dimension_length: req.body.dimensionLength,
                 dimension_width: req.body.dimensionWidth,
                 dimension_height: req.body.dimensionHeight,
-                shippingclass_id: req.body.shippingClassId,
+                shipping_class_id: req.body.shippingClassId,
                 upsells: req.body.upsells,
                 cross_sells: req.body.crossSells,
                 long_description: req.body.longDescription,
@@ -94,38 +95,79 @@ router.post('/addProduct', (req, res) => {
                     sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err message if unable to save data 
                 } else {
                     console.log(results);
-                    sendResponse.sendSuccessData('Product saved successfully', res); // send successfull data submission response
+                    results.departmentId = req.body.departmentId,
+                        results.subDepartmentId = req.body.subDepartmentId,
+                        sendResponse.sendSuccessData(results, res); // send successfull data submission response
                 }
             });
         }
     )
 });
 
-router.get('/', (req, res) => {
-    let query = '';
+router.get('/productList', (req, res) => {
+    console.log('in get products request');
+    console.log('departmentId = ' + req.query.departmentId + '  subDepartmentId = ' + req.query.subDepartmentId + ' subCategory = ' + req.query.subCategory);
     let param = [];
-    if (req.query.departmentId && !req.query.subDepartmenId) {
-        query = 'select * from products where department_id = ?';
+    let query = 'select products.id, departments.name as departmentName, sub_departments.name as subDepartmentName, sub_category.name as subCategoryName,' +
+        'products.product_name, brands.name as brandName, products.description, products.regular_price, products.sale_price, tax_status.name AS taxStatusName, tax_class.name AS taxClassName, ' +
+        'products.sku, products.manage_stock, stock_status.status, sold_individually, weight, dimension_length, dimension_width, dimension_height, shipping_class.name as shippingClass, upsells, ' +
+        'cross_sells, long_description, additional_info, products.help, tags.tag, products.main_image_path, products.auxillary_image_path' +
+        ' from products LEFT JOIN departments ON products.department_id = departments.id ' +
+        'LEFT JOIN sub_departments ON products.sub_department_id = sub_departments.id LEFT JOIN sub_category ON products.sub_category_id = sub_category.id ' +
+        'LEFT JOIN brands ON products.brand_id = brands.id LEFT JOIN tax_status ON products.tax_status_id = tax_status.id LEFT JOIN tax_class ON products.tax_class_id = tax_class.id ' +
+        'LEFT JOIN stock_status ON products.stock_status_id = stock_status.id LEFT JOIN shipping_class ON products.shipping_class_id = shipping_class.id LEFT JOIN tags ON products.tag_id = tags.id';
+
+    if (req.query.departmentId && !req.query.subDepartmentId && !req.query.subCategory) {
+        query = query + ' where products.department_id = ?';
         param.push(req.query.departmentId);
-    } else if (!req.query.departmentId && req.query.subDepartmenId) {
-        query = 'select * from products where sub_department_id = ?';
-        param.push(req.query.subDepartmenId);
-    } else if (req.query.departmentId && req.query.subDepartmenId) {
-        query = 'select * from products where department_id = ?, sub_department_id = ?';
-        param = [req.query.departmentId, req.query.subDepartmenId];
-    } else {
-        query = 'select * from products';
+        console.log('cond 1');
+
+    } else if (req.query.departmentId != undefined && req.query.subDepartmentId != undefined && !req.query.subCategory) {
+        query = query + ' where products.department_id = ? AND products.sub_department_id = ?';
+        param = [req.query.departmentId, req.query.subDepartmentId];
+        console.log('cond 2');
+
+    } else if (req.query.departmentId && req.query.subDepartmentId && req.query.subCategory) {
+        query = query + ' where products.department_id = ? AND products.sub_department_id = ? AND sub_category_id = ?';
+        param = [req.query.departmentId, req.query.subDepartmentId, req.query.subCategoryId];
+        console.log('cond 3');
     }
+    // else {
+    //     query = 'select products.id, departments.name as departmentName, sub_departments.name as subDepartmentName, sub_category.name as subCategoryName, products.product_name, brands.name as brandName from products LEFT JOIN departments ON products.department_id = departments.id AND LEFT JOIN sub_departments ON products.sub_department_id = sub_departments.id AND LEFT JOIN sub_category ON products.sub_category_id = sub_category.id AND LEFT JOIN brands ON products.brand_id = brands.id';
+    // }
+    console.log(param);
+    console.log(query);
     connection.query(query, param, function (error, results, fields) {
         if (error) {
             console.log(error);
             sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err message if unable to save data 
         } else {
+            console.log('Print queryr result');
             console.log(results);
-            sendResponse.sendSuccessData('Product saved successfully', res); // send successfull data submission response
+            sendProductList.formatData(results, res);
+            // sendResponse.sendSuccessData(results, res); // send successfull data submission response
         }
     });
 })
+
+// Api call
+router.get('/updateRequires', (req, res) => {
+    console.log('in update requires');
+    if (!req.query.productId) {
+        sendResponse.sendErrorMessage('Some parameter missing', res); // send err message if unable to save data 
+    } else {
+        connection.query('select products.department_id, products.sub_department_id, products.sub_category_id, products.brand_id, products.tax_status_id, products.tax_class_id, products.stock_status_id, products.shipping_class_id, products.tag_id from products where id = ?', [req.query.productId], function (error, results, fields) {
+            if (error) {
+                console.log(error);
+                sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err message if unable to save data 
+            } else {
+                console.log(results);
+                sendResponse.sendSuccessData(results, res); // send successfull data submission response
+            }
+        });
+    }
+});
+
 
 // Api call
 router.post('/updateProduct', (req, res) => {
@@ -173,12 +215,12 @@ router.post('/updateProduct', (req, res) => {
     ],
         function () {
             manValues.push(moment.utc().format("YYYY-MM-DD HH:mm:ss"));
-
-            connection.query('udate products SET subDepartment_id = ?, subCategory_Id = ?,  product_name = ?,' +
-                'brand_id = ?, description = ? description = ?, regular_price = ? ,sale_price = ?,' +
-                'taxstatus_id = ?, taxclass_id = ?, sku = ?, manage_stock = ?, stockstatus_id = ?,' +
-                ' sold_indvidual = ?, weight = ?, dimension_length = ?, dimension_width = ?, dimension_height = ?, shippingclass_id = ?,' +
-                'upsells = ?, cross_sells = ?, long_description = ?, additional_info = ?, help = ?, tags_id = ?, updated_at = ?', manvalues, function (error, results, fields) {
+            manValues.push(req.body.productId);
+            connection.query('update products SET department_id = ?, sub_department_id = ?, sub_category_id = ?,  product_name = ?, ' +
+                'brand_id = ?, description = ?, regular_price = ? ,sale_price = ?, ' +
+                'tax_status_id = ?, tax_class_id = ?, sku = ?, manage_stock = ?, stock_status_id = ?, ' +
+                'sold_individually = ?, weight = ?, dimension_length = ?, dimension_width = ?, dimension_height = ?, shipping_class_id = ?, ' +
+                'upsells = ?, cross_sells = ?, long_description = ?, additional_info = ?, help = ?, tag_id = ?, updated_at = ? where id = ?', manValues, function (error, results, fields) {
                     if (error) {
                         console.log(error);
                         sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err message if unable to save data 
@@ -191,7 +233,9 @@ router.post('/updateProduct', (req, res) => {
     )
 });
 
-router.post('/deletProduct', (req, res) => {
+
+
+router.post('/deleteProduct', (req, res) => {
     console.log('Inside product file');
 
     async.waterfall([
@@ -205,7 +249,7 @@ router.post('/deletProduct', (req, res) => {
         },
     ],
         function () {
-            connection.query('delete from products where id = ?', [req.body.accessToken], function (error, results, fields) {
+            connection.query('delete from products where id = ?', [req.body.productId], function (error, results, fields) {
                 if (error) {
                     console.log(error);
                     sendResponse.sendErrorMessage('Something went wrong please try again later', res); // send err message if unable to save data 

@@ -1,6 +1,6 @@
 
-var failedStatus = "204";
-var successStatus = "200";
+var failedStatus = 204;
+var successStatus = 200;
 // send success message
 exports.sendSuccessData = function (data, res) {
     var successResponse = {
